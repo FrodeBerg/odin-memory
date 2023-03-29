@@ -8,7 +8,17 @@ function App() {
   let [score, setScore] = useState(0)
   let [highScore, setHighScore] = useState(0)
 
+  function levelUp() {
 
+  }
+
+  function gameOver() {
+
+  }
+
+  function click() {
+    
+  }
 
   return (
     <div>

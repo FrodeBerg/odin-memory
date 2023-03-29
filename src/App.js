@@ -4,6 +4,7 @@ import { useState } from "react";
 
 function App() {
   let [numbers, setNumbers] = useState([])
+  let [clickedNumbers, setClickedNumbers] = ([])
   let [level, setLevel] = useState(0)
   let [score, setScore] = useState(0)
   let [highScore, setHighScore] = useState(0)
@@ -16,8 +17,17 @@ function App() {
 
   }
 
-  function click() {
-    
+  const click = (event) => {
+    let id = event.target.id;
+    if (clickedNumbers.indexOf(id) === -1) {
+      gameOver()
+      return 
+    }
+    setClickedNumbers(...clickedNumbers, id)
+    if (clickedNumbers.length === numbers.length) {
+      levelUp()
+      return 
+    }
   }
 
   return (

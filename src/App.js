@@ -10,11 +10,15 @@ function App() {
   let [highScore, setHighScore] = useState(0)
 
   function levelUp() {
-
+    setLevel(level + 1);
   }
 
   function gameOver() {
-
+    setLevel(0)
+    if (score > highScore) {
+      setHighScore(score)
+    }
+    setScore(0)
   }
 
   const click = (event) => {
@@ -23,6 +27,7 @@ function App() {
       gameOver()
       return 
     }
+    setScore(score + 1)
     setClickedNumbers(...clickedNumbers, id)
     if (clickedNumbers.length === numbers.length) {
       levelUp()

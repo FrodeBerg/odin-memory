@@ -1,41 +1,59 @@
 import './App.css';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 
 function App() {
-  let [numbers, setNumbers] = useState([1, 2, 3, 4])
   let [clickedNumbers, setClickedNumbers] = useState([])
-  let [level, setLevel] = useState(0)
+  let [level, setLevel] = useState(1)
   let [score, setScore] = useState(0)
   let [highScore, setHighScore] = useState(0)
-
-  function levelUp() {
-    setLevel(level + 1);
-  }
-
-  function gameOver() {
-    setLevel(0)
-    if (score > highScore) {
-      setHighScore(score)
-    }
-    setScore(0)
-    setClickedNumbers([])
-  }
+  let [numbers, setNumbers] = useState([])
 
   const click = (event) => {
     let id = +event.target.id;
-    console.log(id, clickedNumbers)
-    if (clickedNumbers.indexOf(id) !== -1) {
-      gameOver()
-      return 
-    }
     setScore(score + 1)
     setClickedNumbers([...clickedNumbers, id])
+  }
+
+  useEffect(() => {
+
+    function randomNumbers() {
+      const randomNumbers = []
+      const range = (level + 10) * 2
+      for (let i = 0; i < (level + 1) * 2; i += 1) {
+        let randomNumber = 0
+        do {
+          randomNumber = Math.floor(Math.random() * range) + 1;
+        } while (!randomNumber || randomNumbers.indexOf(randomNumber) !== -1)
+        randomNumbers.push(randomNumber)
+      }
+      return randomNumbers
+    }
+  
+    function levelUp() {
+      setLevel(level + 1);
+      setClickedNumbers([], setNumbers(randomNumbers()))    
+    }
+  
+    function gameOver() {
+      setLevel(1)
+      if (score > highScore) {
+        setHighScore(score)
+      }
+      setScore(0)
+      setNumbers(randomNumbers())
+      setClickedNumbers([])
+    }
+
     if (clickedNumbers.length === numbers.length) {
       levelUp()
-      return 
+    }  
+
+    if (new Set(clickedNumbers).size !== clickedNumbers.length) {
+      gameOver()
     }
-  }
+  }, [clickedNumbers, highScore, level, numbers.length, score])
+
 
   return (
     <div>

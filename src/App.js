@@ -13,10 +13,10 @@ function App() {
     let id = +event.target.id;
     setScore(score + 1)
     setClickedNumbers([...clickedNumbers, id])
+    setNumbers(numbers.sort(() => Math.random() - 0.5))
   }
 
   useEffect(() => {
-
     function randomNumbers() {
       const randomNumbers = []
       const range = (level + 10) * 2
@@ -29,30 +29,29 @@ function App() {
       }
       return randomNumbers
     }
-  
+    setNumbers(randomNumbers())
+  }, [level])
+
+  useEffect(() => {
     function levelUp() {
       setLevel(level + 1);
-      setClickedNumbers([], setNumbers(randomNumbers()))    
+      setClickedNumbers([])    
     }
   
     function gameOver() {
-      setLevel(1)
       if (score > highScore) {
         setHighScore(score)
       }
       setScore(0)
-      setNumbers(randomNumbers())
+      setLevel(1)
       setClickedNumbers([])
     }
-
-    if (clickedNumbers.length === numbers.length) {
-      levelUp()
-    }  
-
     if (new Set(clickedNumbers).size !== clickedNumbers.length) {
       gameOver()
-    }
-  }, [clickedNumbers, highScore, level, numbers.length, score])
+    } else if (clickedNumbers.length === numbers.length && clickedNumbers.length) {
+      levelUp()
+    }  
+  }, [clickedNumbers, highScore, numbers, score, level])
 
 
   return (
